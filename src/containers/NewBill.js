@@ -20,9 +20,10 @@ export default class NewBill {
         const file = this.document.querySelector(`input[data-testid="file"]`).files[0];
         const filePath = e.target.value.split(/\\/g);
         const fileName = filePath[filePath.length - 1];
-        const isImageCheckedRegex = ".(gif|jpe?g|png)$";
+        const isImageCheckedRegex = ".(jpe?g|png)$";
 
-        // Checked if the extension of the file is .gif / .jpg/ .jpeg or .png
+        // Checked if the extension of the file is  .jpg/ .jpeg or .png
+        // If not: show an alert and clear the input value
         if (fileName.match(isImageCheckedRegex)) {
             const formData = new FormData();
             const email = JSON.parse(localStorage.getItem("user")).email;
@@ -46,7 +47,7 @@ export default class NewBill {
                 .catch(error => console.error(error));
         } else {
             alert("pas une image");
-            throw new Error("file is not an image");
+            this.document.querySelector(`input[data-testid="file"]`).value = null;
         }
     };
     handleSubmit = e => {
