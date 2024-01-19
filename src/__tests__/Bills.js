@@ -2,6 +2,7 @@
  * @jest-environment jsdom
  */
 
+import "@testing-library/jest-dom";
 import { screen, waitFor } from "@testing-library/dom";
 import BillsUI from "../views/BillsUI.js";
 import { bills } from "../fixtures/bills.js";
@@ -62,7 +63,7 @@ describe("Given I am connected as an employee", () => {
             await waitFor(() => screen.getByTestId("form-new-bill"));
         });
 
-        test("Then the click on eye icon should open a modale File", async () => {
+        test("Then the click on eye icon should open a modal File", async () => {
             Object.defineProperty(window, "localStorage", { value: localStorageMock });
             window.localStorage.setItem(
                 "user",
@@ -70,19 +71,26 @@ describe("Given I am connected as an employee", () => {
                     type: "Employee",
                 })
             );
+
             const root = document.createElement("div");
             root.setAttribute("id", "root");
             document.body.append(root);
             router();
             window.onNavigate(ROUTES_PATH.Bills);
 
-            //To avoid trouble with the .modal from bootstraps:
-            $.fn.modal = jest.fn();
+            // const iconEyeButtonsPromise = screen.findAllByTestId("icon-eye");
+            // const iconEyeButtons = await waitFor(() => iconEyeButtonsPromise);
+            const iconEyeButtons = screen.getAllByTestId("icon-eye");
 
-            const iconEyeButton = screen.getAllByTestId("icon-eye");
-            userEvent.click(iconEyeButton[0]);
+            userEvent.click(iconEyeButtons[0]);
 
-            await waitFor(() => screen.getByText("Justificatif"));
+            const modalPromise = screen.findByRole("dialog");
+
+            const modal = await waitFor(() => modalPromise);
+
+            expect(modal).toHaveClass("show");
+
+            //await waitFor(() => screen.findByText("Justificatif"));
         });
     });
 
