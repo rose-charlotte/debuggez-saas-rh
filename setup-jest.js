@@ -1,2 +1,4 @@
-import $ from 'jquery';
+import $ from "jquery";
 global.$ = global.jQuery = $;
+
+require("bootstrap");
