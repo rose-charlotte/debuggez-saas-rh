@@ -90,7 +90,9 @@ describe("Given I am connected as an employee", () => {
 
             expect(modal).toHaveClass("show");
 
-            //await waitFor(() => screen.findByText("Justificatif"));
+            const billProofPromise = screen.findByTestId("billproof");
+            const billProof = await waitFor(() => billProofPromise);
+            expect(billProof).toHaveClass("bill-proof-container");
         });
     });
 
