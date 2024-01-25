@@ -14,6 +14,7 @@ jest.mock("../app/store", () => mockStore);
 
 describe("Given I am connected as an employee", () => {
     beforeEach(() => {
+        jest.spyOn(mockStore, "bills");
         Object.defineProperty(window, "localStorage", { value: localStorageMock });
         window.localStorage.setItem(
             "user",
