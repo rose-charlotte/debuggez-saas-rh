@@ -13,7 +13,8 @@
       "!**/assets/**",
       "!**/external/**",
       "!**/fixtures/**",
-      "!**/lcov-report/**"
+      "!**/lcov-report/**",
+      "!**/.git/**"
     ]
   },
   "type": "module",

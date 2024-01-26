@@ -32,7 +32,10 @@ describe("Given I am connected as an employee", () => {
 
     describe("When I am on NewBill Page", () => {
         describe("When I choose a file to upload", () => {
-            test("Then it should render a label and a file input", () => {
+            test("Then it should render differents labels and  inputs", () => {
+                expect(screen.getByTestId("datepicker")).toBeTruthy();
+                expect(screen.getByTestId("amount")).toBeTruthy();
+                expect(screen.getByTestId("pct")).toBeTruthy();
                 expect(screen.getByTestId("file")).toBeTruthy();
                 expect(screen.getByLabelText("Justificatif")).toBeTruthy();
             });
