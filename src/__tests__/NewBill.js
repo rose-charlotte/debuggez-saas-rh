@@ -2,7 +2,8 @@
  * @jest-environment jsdom
  */
 
-import { screen, waitFor } from "@testing-library/dom";
+import "@testing-library/jest-dom";
+import { fireEvent, screen, waitFor } from "@testing-library/dom";
 
 import userEvent from "@testing-library/user-event";
 import { ROUTES_PATH } from "../constants/routes.js";
@@ -32,11 +33,11 @@ describe("Given I am connected as an employee", () => {
 
     describe("When I am on NewBill Page", () => {
         test("Then it should render differents labels and  inpusts", () => {
-            expect(screen.getByTestId("datepicker")).toBeTruthy();
-            expect(screen.getByTestId("amount")).toBeTruthy();
-            expect(screen.getByTestId("pct")).toBeTruthy();
-            expect(screen.getByTestId("file")).toBeTruthy();
-            expect(screen.getByLabelText("Justificatif")).toBeTruthy();
+            expect(screen.getByTestId("datepicker")).toBeInTheDocument();
+            expect(screen.getByTestId("amount")).toBeInTheDocument();
+            expect(screen.getByTestId("pct")).toBeInTheDocument();
+            expect(screen.getByTestId("file")).toBeInTheDocument();
+            expect(screen.getByLabelText("Justificatif")).toBeInTheDocument();
         });
 
         test("Then I should  have an error message if the file input is not fulfilled with jpg/jpeg/png", async () => {
@@ -50,14 +51,16 @@ describe("Given I am connected as an employee", () => {
     //Test d'integration  post new bill
     describe("When I click on the submit button", () => {
         test("Then I should be redirected on bills page if the form is correctly fulfilled", async () => {
-            userEvent.type(screen.getByTestId("datepicker"), "2004-04-04");
+            fireEvent.change(screen.getByTestId("datepicker"), { target: { value: "2024-01-29" } });
             userEvent.type(screen.getByTestId("amount"), "400");
             userEvent.type(screen.getByTestId("pct"), "20");
             uploadFile("jpg");
 
+            verifyFormIsValid();
             userEvent.click(screen.getByText("Envoyer"));
 
             await waitFor(() => screen.getByText("Mes notes de frais"));
+            expect(screen.getByTestId("tbody")).toBeInTheDocument();
         });
     });
 });
@@ -71,13 +74,21 @@ function uploadFile(extension) {
             mimeType = "text/plain";
     }
 
-    const someValues = [{ name: "toto" }];
-    const str = JSON.stringify(someValues);
-    const blob = new Blob([str]);
-    const file = new File([blob], `toto.${extension}`, {
+    const file = new File(["file content"], `toto.${extension}`, {
         type: mimeType,
     });
 
-    const fileInput = screen.getByLabelText("Justificatif");
+    // const fileInput = screen.getByLabelText("Justificatif");
+    const fileInput = screen.getByTestId("file");
     userEvent.upload(fileInput, file);
+}
+
+function verifyFormIsValid() {
+    expect(screen.getByTestId("expense-type")).toBeValid();
+    expect(screen.getByTestId("expense-name")).toBeValid();
+    expect(screen.getByTestId("datepicker")).toBeValid();
+    expect(screen.getByTestId("amount")).toBeValid();
+    expect(screen.getByTestId("vat")).toBeValid();
+    expect(screen.getByTestId("pct")).toBeValid();
+    expect(screen.getByTestId("commentary")).toBeValid();
 }
