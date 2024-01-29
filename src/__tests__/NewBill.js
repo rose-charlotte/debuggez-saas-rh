@@ -31,35 +31,33 @@ describe("Given I am connected as an employee", () => {
     });
 
     describe("When I am on NewBill Page", () => {
-        describe("When I choose a file to upload", () => {
-            test("Then it should render differents labels and  inpusts", () => {
-                expect(screen.getByTestId("datepicker")).toBeTruthy();
-                expect(screen.getByTestId("amount")).toBeTruthy();
-                expect(screen.getByTestId("pct")).toBeTruthy();
-                expect(screen.getByTestId("file")).toBeTruthy();
-                expect(screen.getByLabelText("Justificatif")).toBeTruthy();
-            });
-
-            test("Then I should  have an error message if the file input is fulfilled with jpg/jpeg/png", async () => {
-                uploadFile("txt");
-
-                const fileInput = screen.getByLabelText("Justificatif");
-                expect(fileInput.value).toBeFalsy();
-            });
+        test("Then it should render differents labels and  inpusts", () => {
+            expect(screen.getByTestId("datepicker")).toBeTruthy();
+            expect(screen.getByTestId("amount")).toBeTruthy();
+            expect(screen.getByTestId("pct")).toBeTruthy();
+            expect(screen.getByTestId("file")).toBeTruthy();
+            expect(screen.getByLabelText("Justificatif")).toBeTruthy();
         });
 
-        //Test d'integration  post new bill
-        describe("When I click on the submit button", () => {
-            test("Then I should be redirected on bills page if the form is correctly fulfilled", async () => {
-                userEvent.type(screen.getByTestId("datepicker"), "2004-04-04");
-                userEvent.type(screen.getByTestId("amount"), "400");
-                userEvent.type(screen.getByTestId("pct"), "20");
-                uploadFile("jpg");
+        test("Then I should  have an error message if the file input is not fulfilled with jpg/jpeg/png", async () => {
+            uploadFile("txt");
 
-                userEvent.click(screen.getByText("Envoyer"));
+            const fileInput = screen.getByLabelText("Justificatif");
+            expect(fileInput.value).toBeFalsy();
+        });
+    });
 
-                await waitFor(() => screen.getByText("Mes notes de frais"));
-            });
+    //Test d'integration  post new bill
+    describe("When I click on the submit button", () => {
+        test("Then I should be redirected on bills page if the form is correctly fulfilled", async () => {
+            userEvent.type(screen.getByTestId("datepicker"), "2004-04-04");
+            userEvent.type(screen.getByTestId("amount"), "400");
+            userEvent.type(screen.getByTestId("pct"), "20");
+            uploadFile("jpg");
+
+            userEvent.click(screen.getByText("Envoyer"));
+
+            await waitFor(() => screen.getByText("Mes notes de frais"));
         });
     });
 });
