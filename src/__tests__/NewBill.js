@@ -40,7 +40,7 @@ describe("Given I am connected as an employee", () => {
             expect(screen.getByLabelText("Justificatif")).toBeInTheDocument();
         });
 
-        test("Then I should  have an error message if the file input is not fulfilled with jpg/jpeg/png", async () => {
+        test("Then I should  have an error message if the file input is not fulfilled with jpg/jpeg/png", () => {
             uploadFile("txt");
 
             const fileInput = screen.getByLabelText("Justificatif");

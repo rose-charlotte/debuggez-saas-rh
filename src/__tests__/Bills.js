@@ -60,8 +60,6 @@ describe("Given I am connected as an employee", () => {
             router();
             window.onNavigate(ROUTES_PATH.Bills);
 
-            // const iconEyeButtonsPromise = screen.findAllByTestId("icon-eye");
-            // const iconEyeButtons = await waitFor(() => iconEyeButtonsPromise);
             const iconEyeButtons = screen.getAllByTestId("icon-eye");
 
             userEvent.click(iconEyeButtons[0]);
