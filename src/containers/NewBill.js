@@ -19,6 +19,10 @@ export default class NewBill {
         e.preventDefault();
         const file = this.document.querySelector(`input[data-testid="file"]`).files[0];
 
+        //Correction pour l'affichage de l'erreur en console "Filename is not defined"
+        const filePath = e.target.value.split(/\\/g);
+        const fileName = filePath[filePath.length - 1];
+
         const isImageCheckedRegex = ".(jpe?g|png)$";
 
         // Checked if the extension of the file is  .jpg/ .jpeg or .png
